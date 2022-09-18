@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_getx/recent_counter.dart';
 import 'package:get/get.dart';
 
 import 'my_detail_page.dart';
@@ -13,6 +14,40 @@ class ContentPage extends StatefulWidget {
 }
 
 class _ContentPageState extends State<ContentPage> {
+
+  List list = [];
+  List info = [];
+  List recent = [];
+
+  _readData() async {
+    await DefaultAssetBundle.of(context)
+        .loadString("json/recent.json")
+        .then((s) {
+      setState(() {
+        list = json.decode(s);
+      });
+    });
+    await DefaultAssetBundle.of(context)
+        .loadString("json/detail.json")
+        .then((s) {
+      setState(() {
+        info = json.decode(s);
+      });
+    });
+     await DefaultAssetBundle.of(context)
+        .loadString("json/recent.json")
+        .then((s) {
+      setState(() {
+        recent = json.decode(s);
+      });
+    });
+  }
+
+  @override
+  void initState() {
+    _readData();
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -136,11 +171,19 @@ class _ContentPageState extends State<ContentPage> {
                 height: 220,
                 child: PageView.builder(
                     controller: PageController(viewportFraction: 0.88),
-                    itemCount: 4,
+                    itemCount: info.length,
                     itemBuilder: (_, i){
                       return GestureDetector(
-
-
+                        onTap: (){
+                          Get.toNamed("/detail/",arguments: {
+                            'title': info[i]['title'].toString(),
+                            'text': info[i]['text'].toString(),
+                            'name': info[i]['name'].toString(),
+                            'img': info[i]['img'].toString(),
+                            'time': info[i]['time'].toString(),
+                            'prize': info[i]['prize'].toString(),
+                          });
+                        },
                         child: Container(
                           padding: const EdgeInsets.only(left: 20, top: 20),
                           height: 220,
@@ -156,7 +199,7 @@ class _ContentPageState extends State<ContentPage> {
                                   child:Row(
                                     children: [
                                       Text(
-                                        "Title",
+                                        info[i]['title'],
                                         style: TextStyle(
                                             fontSize: 30,
                                             fontWeight: FontWeight.w500,
@@ -171,9 +214,11 @@ class _ContentPageState extends State<ContentPage> {
                               Container(
                                 width: width,
                                 child: Text(
-                                  "Text",
+                                  info[i]["text"]?? 'no text',
+                                  maxLines: 2,
+                                  overflow: TextOverflow.ellipsis,
                                   style: TextStyle(
-                                      fontSize: 20,
+                                      fontSize: 14,
                                       color:Color(0xFFb8eefc)
                                   ),
                                 ),
@@ -181,7 +226,7 @@ class _ContentPageState extends State<ContentPage> {
                               SizedBox(height: 5,),
                               Divider(thickness: 1.0,),
                               Row(
-                                  children:[for(int i=0; i<4; i++)
+                                  children:[for(int i=0; i<info.length; i++)
                                     Container(
 
                                       width: 50,
@@ -192,7 +237,7 @@ class _ContentPageState extends State<ContentPage> {
                                             borderRadius: BorderRadius.circular(25),
                                             image: DecorationImage(
                                                 image: AssetImage(
-                                                    "img/background.jpg"
+                                                   info[i]['img'] 
                                                 ),
                                                 fit: BoxFit.cover
                                             )
@@ -243,7 +288,10 @@ class _ContentPageState extends State<ContentPage> {
                           color: Color(0xFFfdc33c)
                       ),
                       child: GestureDetector(
-
+                        onTap: (){
+                          Get.to(()=>RecentContest());
+                        },
+                        child: Icon(Icons.arrow_forward_ios,color: Colors.white,),
                       ),
                     )
                   ],
@@ -256,7 +304,7 @@ class _ContentPageState extends State<ContentPage> {
                       child: ListView.builder(
                           shrinkWrap: true,
                           scrollDirection: Axis.vertical,
-                          itemCount: 4,
+                          itemCount: recent.length,
                           itemBuilder: (_, i){
                             return Container(
                               width: width,
@@ -273,7 +321,7 @@ class _ContentPageState extends State<ContentPage> {
                                     CircleAvatar(
                                       radius:40,
                                       backgroundImage: AssetImage(
-                                          "img/background.jpg"
+                                          recent[i]['img'] ?? 'no imag'
                                       ),
                                     ),
                                     SizedBox(width: 10,),
@@ -282,10 +330,10 @@ class _ContentPageState extends State<ContentPage> {
                                       crossAxisAlignment: CrossAxisAlignment.start,
                                       children: [
                                         Text(
-                                          "Status",
+                                          recent[i]['status'],
                                           style: TextStyle(
-                                              color:Color(0xFFfdebb2),
-                                              fontSize: 12,
+                                              color:Colors.orange,
+                                              fontSize: 15,
                                               decoration: TextDecoration.none
                                           ),
                                         ),
@@ -293,7 +341,7 @@ class _ContentPageState extends State<ContentPage> {
                                         SizedBox(
                                           width: 170,
                                           child: Text(
-                                            "Text",
+                                            recent[i]['text'] ?? 'no text',
 
                                             style: TextStyle(
                                                 color:Color(0xFF3b3f42),
@@ -306,16 +354,18 @@ class _ContentPageState extends State<ContentPage> {
                                       ],
                                     ),
                                     Expanded(child: Container()),
-                                    Container(
-                                      width: 70,
-                                      height: 70,
-
-                                      child: Text(
-                                        "Time",
-                                        style: TextStyle(
-                                            fontSize: 10,
-                                            decoration: TextDecoration.none,
-                                            color:Color(0xFFb2b8bb)
+                                    Expanded(
+                                      child: Container(
+                                        width: 100,
+                                        height: 100,
+                                        padding: EdgeInsets.symmetric(vertical: 10),
+                                        child: Text(
+                                          recent[i]['time'] ?? 'no',
+                                          style: TextStyle(
+                                              fontSize: 10,
+                                              decoration: TextDecoration.none,
+                                              color:Color(0xFFb2b8bb)
+                                          ),
                                         ),
                                       ),
                                     ),
