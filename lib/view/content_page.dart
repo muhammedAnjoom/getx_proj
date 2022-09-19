@@ -2,7 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_getx/recent_counter.dart';
+import 'package:flutter_getx/view/recent_counter.dart';
 import 'package:get/get.dart';
 
 import 'my_detail_page.dart';
@@ -77,7 +77,7 @@ class _ContentPageState extends State<ContentPage> {
                       CircleAvatar(
                         radius:40,
                         backgroundImage: AssetImage(
-                            "img/background.jpg"
+                            "img/images1.jpeg"
                         ),
                       ),
                       SizedBox(width: 10,),
@@ -159,7 +159,8 @@ class _ContentPageState extends State<ContentPage> {
                           color: Color(0xFFfdc33c)
                       ),
                       child: GestureDetector(
-
+                        onTap: ()=>Get.to(()=>RecentContest()),
+                        child: Icon(Icons.arrow_forward_ios,color: Colors.white,),
                       ),
                     )
                   ],

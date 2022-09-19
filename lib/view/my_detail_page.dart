@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:flutter_getx/controller/detali_controller.dart';
 import 'package:get/get.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -15,14 +16,10 @@ class DetailPage extends StatefulWidget {
 }
 
 class _DetailPageState extends State<DetailPage> {
-
   List img = [];
 
   _readData() async {
-    
-    await DefaultAssetBundle.of(context)
-        .loadString("json/img.json")
-        .then((s) {
+    await DefaultAssetBundle.of(context).loadString("json/img.json").then((s) {
       setState(() {
         img = json.decode(s);
       });
@@ -40,6 +37,7 @@ class _DetailPageState extends State<DetailPage> {
     double height = MediaQuery.of(context).size.height;
     double width = MediaQuery.of(context).size.width;
     int _currentIndex = 0;
+    final DetailController fav = Get.put(DetailController());
     return Scaffold(
       body: Container(
         color: Color(0xFFc5e5f3),
@@ -49,7 +47,7 @@ class _DetailPageState extends State<DetailPage> {
                 top: 50,
                 left: 10,
                 child: IconButton(
-                  onPressed: () => Get.to(()=>ContentPage()),
+                  onPressed: () => Get.toNamed('/home'),
                   icon: Icon(Icons.home),
                 )),
             Positioned(
@@ -253,7 +251,7 @@ class _DetailPageState extends State<DetailPage> {
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
                                   Text(
-                                    Get.arguments['time'] ,
+                                    Get.arguments['time'],
                                     style: TextStyle(
                                         fontSize: 18,
                                         color: Color(0xFF303030),
@@ -322,8 +320,17 @@ class _DetailPageState extends State<DetailPage> {
                         decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(20),
                             color: Color(0xFFfbc33e)),
-                        child:
-                            Icon(Icons.favorite_border, color: Colors.white)),
+                        child: GetX<DetailController>(
+                          builder: (controller) {
+                            return IconButton(
+                              color: Colors.white,
+                              icon: controller.fav == 0
+                                  ? Icon(Icons.favorite_border_outlined)
+                                  : Icon(Icons.favorite),
+                              onPressed: () => fav.favCounter(),
+                            );
+                          },
+                        )),
                     SizedBox(
                       width: 10,
                     ),

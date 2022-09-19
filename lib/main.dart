@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_getx/view/recent_counter.dart';
 import 'package:get/get.dart';
-import 'content_page.dart';
-import 'my_detail_page.dart';
-import 'my_home_page.dart';
+import 'view/content_page.dart';
+import 'view/my_detail_page.dart';
+import 'view/my_home_page.dart';
 
 void main() {
   runApp(MyApp());
@@ -28,7 +29,9 @@ class MyApp extends StatelessWidget {
       initialRoute: "/",
       getPages: [
         GetPage(name: "/", page: ()=> MyHomePage()),
-        GetPage(name: "/detail", page: ()=> DetailPage())
+        GetPage(name: '/home', page: ()=>ContentPage()),
+        GetPage(name: "/detail", page: ()=> DetailPage()),
+        GetPage(name: "/recent", page: ()=> RecentContest())
       ],
     );
   }

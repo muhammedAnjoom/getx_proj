@@ -37,11 +37,17 @@ class _RecentContestState extends State<RecentContest> {
       appBar: AppBar(
         elevation: 0,
         backgroundColor: Color(0xffcbe6f6),
-        leading: Icon(Icons.arrow_back_ios,color: Colors.black,),
+        leading: IconButton(
+          icon: Icon(
+            Icons.arrow_back_ios,
+            color: Colors.black,
+          ),
+          onPressed: () => Get.back(),
+        ),
       ),
       backgroundColor: Color(0xffcbe6f6),
       body: Container(
-        margin: EdgeInsets.only(left: 20,top: 10,right: 10),
+        margin: EdgeInsets.only(left: 20, top: 10, right: 10),
         child: Column(
           children: [
             Expanded(
@@ -52,7 +58,6 @@ class _RecentContestState extends State<RecentContest> {
                     for (int i = 0; i < info.length; i++)
                       Container(
                           height: 220,
-
                           margin: EdgeInsets.only(bottom: 30),
                           child: GestureDetector(
                             onTap: () {
@@ -66,8 +71,7 @@ class _RecentContestState extends State<RecentContest> {
                               });
                             },
                             child: Container(
-                              padding:
-                                  const EdgeInsets.only(left: 20, top: 20),
+                              padding: const EdgeInsets.only(left: 20, top: 20),
                               height: 220,
                               width: MediaQuery.of(context).size.width - 20,
                               margin: const EdgeInsets.only(right: 10),
